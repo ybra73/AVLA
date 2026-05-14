@@ -20,271 +20,1038 @@
     --text: #e8edf5;
     --muted: #7a8ba8;
     --green: #00e676;
-    --border: rgba(0, 212, 255, 0.15);
-    --card: rgba(255, 255, 255, 0.04);
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(0,212,255,0.15);
+    --wa: #25D366;
+    --tg: #0088cc;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background-color: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
 
-  /* MANTENIENDO ESTILOS ORIGINALES */
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-  header { padding: 30px 0; display: flex; justify-content: space-between; align-items: center; }
-  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 10px; }
-  .logo span { color: var(--accent); }
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:1000;
+    background: rgba(4,8,15,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1rem;
+    color: var(--accent); text-decoration: none;
+  }
+  .nav-brand .flag { font-size: 1.3rem; }
+  .lang-switcher { display: flex; gap: 4px; flex-wrap: wrap; }
+  .lang-btn {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--muted); padding: 4px 10px; border-radius: 20px;
+    cursor: pointer; font-size: 0.7rem; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .lang-btn.active, .lang-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+  .nav-cta {
+    background: linear-gradient(135deg, #00d4ff, #0099bb);
+    color: #000; font-weight: 700; font-size: 0.75rem;
+    padding: 6px 14px; border-radius: 25px; text-decoration: none;
+    white-space: nowrap; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,212,255,0.4); }
 
-  .hero { padding: 60px 0 100px; text-align: center; position: relative; }
-  .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1.1; margin-bottom: 25px; letter-spacing: -2px; }
-  .hero h1 span { color: var(--accent); display: block; }
-  .hero p { color: var(--muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px; }
+  /* ── HERO ── */
+  .hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 100px 20px 60px; }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,212,255,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(255,107,53,0.06) 0%, transparent 60%),
+      url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1400&q=70') center/cover;
+    filter: brightness(0.15);
+  }
+  .hero-bg::after {
+    content:''; position: absolute; inset:0;
+    background: linear-gradient(to bottom, rgba(4,8,15,0.3) 0%, rgba(4,8,15,0.8) 100%);
+  }
+  .hero-content { position: relative; z-index:1; max-width: 700px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 30px; padding: 6px 14px; font-size: 0.75rem;
+    color: var(--accent); margin-bottom: 20px; font-weight: 500;
+  }
+  .hero-badge .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+  @keyframes pulse-dot { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:0.4; transform: scale(0.7); } }
+  .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2rem, 6vw, 3.8rem); line-height: 1.1; margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--accent), #667eea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 1rem; color: var(--muted); line-height: 1.5; margin-bottom: 28px; max-width: 560px; }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #0099bb);
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 0 30px rgba(0,212,255,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(0,212,255,0.5); }
+  .btn-secondary {
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.15);
+    font-weight: 500;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
-  .card { background: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 32px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,212,255,0.1); }
-  .card h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; margin-bottom: 15px; }
+  /* ── STATS ── */
+  .stats-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 16px; }
+  .stats-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; text-align: center; }
+  @media (min-width: 640px) {
+    .stats-inner { grid-template-columns: repeat(4, 1fr); }
+  }
+  .stat-number { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
 
-  /* BOTONES FLOTANTES */
-  .lang-switcher { position: fixed; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 1000; background: rgba(11, 18, 32, 0.8); padding: 6px; border-radius: 50px; border: 1px solid var(--border); backdrop-filter: blur(10px); }
-  .lang-btn { background: none; border: none; color: var(--muted); font-weight: 700; font-size: 0.75rem; cursor: pointer; padding: 8px 12px; border-radius: 50px; transition: 0.3s; }
-  .lang-btn.active { background: var(--accent); color: #000; }
+  /* ── SECTION BASE ── */
+  section { padding: 60px 20px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+  .section-sub { color: var(--muted); font-size: 0.95rem; max-width: 560px; line-height: 1.6; margin-bottom: 32px; }
 
-  /* CHATBOT ORIGINAL */
-  .chat-widget { position: fixed; bottom: 30px; right: 30px; width: 380px; max-width: calc(100vw - 60px); background: var(--surface); border: 1px solid var(--border); border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); z-index: 999; }
-  .chat-header { padding: 15px 20px; background: var(--surface2); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-  .chat-header h4 { font-family: 'Syne', sans-serif; font-size: 0.9rem; }
-  .chat-status { font-size: 0.7rem; color: var(--green); display: flex; align-items: center; gap: 5px; }
-  .chat-body { height: 350px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-  .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.9rem; line-height: 1.4; }
-  .msg-bot { background: var(--surface2); color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; }
-  .msg-user { background: var(--accent); color: #000; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
-  .chat-footer { padding: 15px; background: var(--surface2); display: flex; gap: 10px; }
-  .chat-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; color: var(--text); outline: none; font-size: 0.9rem; }
+  /* ── SERVICES ── */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .service-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; transition: all 0.3s; }
+  .service-card.featured { border-color: rgba(0,212,255,0.4); background: rgba(0,212,255,0.06); }
+  .service-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+  .service-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .service-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+  .service-tag { display: inline-block; background: rgba(0,230,118,0.15); color: var(--green); border: 1px solid rgba(0,230,118,0.3); border-radius: 20px; padding: 3px 10px; font-size: 0.7rem; font-weight: 600; margin-top: 12px; }
+  .service-tag.premium { background: rgba(245,197,24,0.15); color: var(--gold); border-color: rgba(245,197,24,0.3); }
 
-  /* ESTILOS DE LA NUEVA SECCIÓN DE REGISTRO */
-  .registro-section { background: var(--surface); border-top: 1px solid var(--border); padding: 80px 20px; }
-  .registro-container { max-width: 500px; margin: 0 auto; background: var(--surface2); border: 1px solid var(--border); border-radius: 28px; padding: 40px 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
-  .registro-line { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent), #005f73); }
-  .registro-header { text-align: center; margin-bottom: 30px; }
-  .registro-header h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; text-transform: uppercase; color: #fff; }
-  .registro-header h2 span { color: var(--accent); }
-  .form-group { margin-bottom: 20px; }
-  .form-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-  .form-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; color: var(--text); font-size: 1rem; outline: none; transition: 0.3s; }
-  .form-input:focus { border-color: var(--accent); }
-  .form-btn { width: 100%; background: linear-gradient(135deg, var(--accent), #008eb3); color: #000; border: none; border-radius: 50px; padding: 16px; font-weight: 800; font-size: 1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-  .form-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4); }
-  .success-msg { display: none; text-align: center; padding: 20px; background: rgba(0, 230, 118, 0.1); border: 1px solid var(--green); color: var(--green); border-radius: 15px; margin-top: 20px; }
+  /* ── PROCESS ── */
+  .process { background: var(--surface); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; }
+  .step { text-align: center; padding: 16px; }
+  .step-num { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #667eea); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #000; margin: 0 auto 12px; box-shadow: 0 0 15px rgba(0,212,255,0.4); }
+  .step h3 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .step p { color: var(--muted); font-size: 0.8rem; line-height: 1.4; }
 
-  footer { padding: 60px 0; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
+  /* ── ADVISOR ── */
+  .advisor-inner { display: flex; flex-direction: column; gap: 30px; align-items: center; }
+  @media (min-width: 768px) {
+    .advisor-inner { flex-direction: row; }
+  }
+  .advisor-photo-wrap { position: relative; text-align: center; flex-shrink: 0; }
+  .advisor-photo { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+  .advisor-badge { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; font-weight: 700; font-size: 0.7rem; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+  .advisor h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+  .advisor-perks { list-style: none; margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
+  .advisor-perks li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--muted); }
+  .advisor-perks li span { color: var(--accent); font-size: 1rem; flex-shrink: 0; }
+  .zero-fail { background: linear-gradient(135deg, rgba(0,230,118,0.12), rgba(0,212,255,0.08)); border: 1px solid rgba(0,230,118,0.3); border-radius: 14px; padding: 16px 20px; display: flex; gap: 12px; align-items: center; margin-top: 20px; }
+  .zero-fail .icon { font-size: 1.8rem; }
+  .zero-fail strong { display: block; font-family: 'Syne', sans-serif; font-size: 0.9rem; color: var(--green); font-weight: 700; }
+  .zero-fail p { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .tcard { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
+  .stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 10px; letter-spacing: 2px; }
+  .tcard blockquote { font-size: 0.85rem; line-height: 1.5; font-style: italic; margin-bottom: 16px; }
+  .tcard-author { display: flex; align-items: center; gap: 10px; }
+  .tcard-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+  .tcard-name { font-weight: 600; font-size: 0.85rem; }
+  .tcard-origin { font-size: 0.7rem; color: var(--muted); }
+
+  /* ── PRICING ── */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+  .price-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 24px 20px; position: relative; }
+  .price-card.popular { border-color: var(--accent); background: rgba(0,212,255,0.07); }
+  .popular-label { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; font-size: 0.65rem; font-weight: 700; padding: 3px 14px; border-radius: 20px; white-space: nowrap; }
+  .price-card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+  .price-consult-badge {
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 14px 0 10px;
+  }
+  .popular-badge {
+    background: rgba(245,197,24,0.1);
+    border-color: rgba(245,197,24,0.4);
+    color: var(--gold);
+  }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .price-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: var(--muted); }
+  .price-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .price-cta { display: block; text-align: center; padding: 10px 16px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: all 0.25s; }
+  .price-cta.primary-cta { background: linear-gradient(135deg, var(--accent), #0099bb); color: #000; box-shadow: 0 0 24px rgba(0,212,255,0.3); }
+  .price-cta.outline-cta { border: 1px solid var(--border); color: var(--text); }
+
+  /* ── LANGUAGES ── */
+  .lang-flags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .lang-flag { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 6px 16px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px; }
+
+  /* ══ FLOATING BUTTONS — PULSATING ══ */
+  #floating-btns {
+    position: fixed;
+    bottom: 20px;
+    right: 16px;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  @keyframes fab-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.25), 0 4px 16px rgba(0,0,0,0.3); }
+    50%  { box-shadow: 0 0 0 10px rgba(255,255,255,0), 0 4px 16px rgba(0,0,0,0.3); }
+    100% { box-shadow: 0 0 0 0 rgba(255,255,255,0), 0 4px 16px rgba(0,0,0,0.3); }
+  }
+  @keyframes fab-pulse-wa {
+    0%   { box-shadow: 0 0 0 0 rgba(37,211,102,0.5), 0 4px 16px rgba(37,211,102,0.3); transform: scale(1); }
+    50%  { box-shadow: 0 0 0 12px rgba(37,211,102,0), 0 4px 16px rgba(37,211,102,0.3); transform: scale(1.04); }
+    100% { box-shadow: 0 0 0 0 rgba(37,211,102,0), 0 4px 16px rgba(37,211,102,0.3); transform: scale(1); }
+  }
+  @keyframes fab-pulse-tg {
+    0%   { box-shadow: 0 0 0 0 rgba(0,136,204,0.5), 0 4px 16px rgba(0,136,204,0.3); transform: scale(1); }
+    50%  { box-shadow: 0 0 0 12px rgba(0,136,204,0), 0 4px 16px rgba(0,136,204,0.3); transform: scale(1.04); }
+    100% { box-shadow: 0 0 0 0 rgba(0,136,204,0), 0 4px 16px rgba(0,136,204,0.3); transform: scale(1); }
+  }
+  @keyframes fab-pulse-chat {
+    0%   { box-shadow: 0 0 0 0 rgba(0,212,255,0.6), 0 6px 24px rgba(0,212,255,0.4); transform: scale(1); }
+    50%  { box-shadow: 0 0 0 14px rgba(0,212,255,0), 0 6px 24px rgba(0,212,255,0.4); transform: scale(1.05); }
+    100% { box-shadow: 0 0 0 0 rgba(0,212,255,0), 0 6px 24px rgba(0,212,255,0.4); transform: scale(1); }
+  }
+
+  .fab {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    transition: transform 0.25s;
+  }
+  .fab:hover { transform: scale(1.12) !important; animation: none !important; }
+
+  .fab-wa {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    animation: fab-pulse-wa 2.2s ease-in-out infinite;
+  }
+  .fab-wa svg { width: 28px; height: 28px; fill: #fff; }
+
+  .fab-tg {
+    background: linear-gradient(135deg, #0088cc, #005fa3);
+    animation: fab-pulse-tg 2.4s ease-in-out infinite;
+    animation-delay: 0.4s;
+    overflow: hidden;
+  }
+  .fab-sharon {
+    background: transparent;
+    border: 2px solid rgba(0,136,204,0.6);
+  }
+  .fab-tg svg { width: 28px; height: 28px; fill: #fff; }
+
+  .fab-chat {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(135deg, var(--accent), #667eea);
+    animation: fab-pulse-chat 2s ease-in-out infinite;
+    animation-delay: 0.8s;
+    overflow: hidden;
+  }
+  .fab-chat img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .fab-label {
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(11,18,32,0.97);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .fab:hover .fab-label { opacity: 1; }
+
+  /* ── CHAT WINDOW ── */
+  #chatWindow {
+    position: fixed;
+    bottom: 90px;
+    right: 16px;
+    width: calc(100vw - 32px);
+    max-width: 360px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    max-height: 520px;
+    z-index: 9999;
+  }
+  #chatWindow.open { display: flex; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+  .chat-header {
+    background: linear-gradient(135deg, rgba(0,212,255,0.18), rgba(102,126,234,0.18));
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .chat-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+  .chat-header-name { font-weight: 700; font-size: 0.9rem; }
+  .chat-header-status { font-size: 0.65rem; color: var(--green); }
+  .chat-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 4px; margin-left: auto; }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 340px;
+    scroll-behavior: smooth;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .msg { max-width: 88%; padding: 8px 12px; border-radius: 14px; font-size: 0.8rem; line-height: 1.45; word-break: break-word; }
+  .msg.bot { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); align-self: flex-start; border-radius: 4px 14px 14px 14px; }
+  .msg.user { background: rgba(255,255,255,0.08); align-self: flex-end; border-radius: 14px 4px 14px 14px; }
+  .msg.loading { background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.15); align-self: flex-start; color: var(--muted); font-style: italic; }
+  .loading-dots { display: inline-flex; gap: 3px; align-items: center; }
+  .loading-dots span { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: bounce-dot 1.2s infinite; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce-dot { 0%,80%,100% { transform: scale(0.6); opacity:0.4; } 40% { transform: scale(1); opacity:1; } }
+
+  .chat-footer { border-top: 1px solid var(--border); padding: 10px; display: flex; gap: 8px; flex-shrink: 0; }
+  .chat-input {
+    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    border-radius: 25px; padding: 8px 14px; color: var(--text); font-size: 0.82rem;
+    outline: none; font-family: 'DM Sans', sans-serif;
+    -webkit-appearance: none;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-send {
+    width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), #667eea);
+    border: none; border-radius: 50%; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; color: #000; font-size: 0.9rem;
+    flex-shrink: 0; transition: transform 0.2s;
+  }
+  .chat-send:hover { transform: scale(1.1); }
+  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .chat-error { font-size: 0.7rem; color: #ff6b6b; text-align: center; padding: 4px 8px; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 40px 20px 24px; text-align: center; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+  .footer-sub { color: var(--muted); font-size: 0.75rem; margin-bottom: 16px; }
+  .footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-copy { font-size: 0.7rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 16px; }
+
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE FINE-TUNING ── */
+  @media (max-width: 480px) {
+    nav { padding: 10px 14px; }
+    .lang-switcher { gap: 3px; }
+    .lang-btn { padding: 3px 7px; font-size: 0.65rem; }
+    #floating-btns { bottom: 16px; right: 12px; gap: 10px; }
+    .fab { width: 50px; height: 50px; }
+    .fab-chat { width: 54px; height: 54px; }
+    #chatWindow { bottom: 80px; right: 12px; width: calc(100vw - 24px); max-height: 480px; }
+    .chat-messages { max-height: 300px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="lang-switcher">
-  <button class="lang-btn active" onclick="setLang('es')">ES</button>
-  <button class="lang-btn" onclick="setLang('en')">EN</button>
-  <button class="lang-btn" onclick="setLang('pt')">PT</button>
-  <button class="lang-btn" onclick="setLang('fr')">FR</button>
-  <button class="lang-btn" onclick="setLang('ht')">HT</button>
-</div>
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-brand"><span class="flag">🚗</span><span>Florida License Fast</span></a>
+  <div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn active" onclick="setLang('es')">🇪🇸 ES</button>
+    <button class="lang-btn" onclick="setLang('en')">🇺🇸 EN</button>
+    <button class="lang-btn" onclick="setLang('pt')">🇧🇷 PT</button>
+    <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
+    <button class="lang-btn" onclick="setLang('ht')">🇭🇹 HT</button>
+  </div>
+  <a href="https://wa.me/14178532077" class="nav-cta" target="_blank" data-i18n="nav_cta">📲 Reservar Cita</a>
+</nav>
 
-<div class="container">
-  <header>
-    <a href="#" class="logo">FLORIDA <span>LICENSE</span></a>
-  </header>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span><span data-i18n="badge">Servicio disponible ahora · Miami · Orlando · Tampa · Doral</span></div>
+    <h1 data-i18n="hero_title">Obtén tu Licencia<br><em>de Florida</em><br>en 1-2 días</h1>
+    <p data-i18n="hero_sub">Miles de personas llegan a Florida cada día. No dejes que el idioma ni el proceso te detenga. Te acompañamos de principio a fin, en tu idioma.</p>
+    <div class="hero-ctas">
+      <a href="https://wa.me/14178532077" class="btn-primary" target="_blank">💬 <span data-i18n="hero_cta1">Escribir al WhatsApp</span></a>
+      <a href="#servicios" class="btn-secondary">📋 <span data-i18n="hero_cta2">Ver Servicios</span></a>
+    </div>
+  </div>
+</section>
 
-  <section class="hero">
-    <h1 data-i18n="hero_title_raw">TU LICENCIA <span>RÁPIDA Y FÁCIL</span></h1>
-    <p data-i18n="hero_sub">Obtén tu licencia de conducir en Florida sin complicaciones. Asesoría experta en tu propio idioma.</p>
-  </section>
-
-  <div class="grid">
-    <div class="card">
-      <h3 data-i18n="card1_title">Sin Miedo al Inglés</h3>
-      <p data-i18n="card1_text">Te preparamos y acompañamos en todo el proceso para que el idioma no sea una barrera.</p>
-    </div>
-    <div class="card">
-      <h3 data-i18n="card2_title">Todo Tipo de Estatus</h3>
-      <p data-i18n="card2_text">Asesoría para personas con pasaporte, permiso de trabajo, asilo o residencia.</p>
-    </div>
-    <div class="card">
-      <h3 data-i18n="card3_title">Instructores Certificados</h3>
-      <p data-i18n="card3_text">Expertos con años de experiencia ayudando a la comunidad latina en Florida.</p>
-    </div>
+<!-- STATS -->
+<div class="stats-bar fade-in">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-number">0%</div><div class="stat-label" data-i18n="stat1">Reprobados</div></div>
+    <div class="stat-item"><div class="stat-number">48h</div><div class="stat-label" data-i18n="stat2">Licencia Express</div></div>
+    <div class="stat-item"><div class="stat-number">5+</div><div class="stat-label" data-i18n="stat3">Idiomas disponibles</div></div>
+    <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label" data-i18n="stat4">Personalizado</div></div>
   </div>
 </div>
 
-<section class="registro-section">
-  <div class="registro-container">
-    <div class="registro-line"></div>
-    <div class="registro-header">
-      <h2>Registro <span data-i18n="reg_span">Oficial</span></h2>
-      <p data-i18n="reg_sub">Ingresa tus datos para procesar tu solicitud y asignarte un asesor especializado.</p>
+<!-- SERVICES -->
+<section class="services fade-in" id="servicios">
+  <div class="container">
+    <div class="section-tag" data-i18n="svc_tag">LO QUE OFRECEMOS</div>
+    <h2 class="section-title" data-i18n="svc_title">Todo lo que necesitas<br>para conducir legal</h2>
+    <p class="section-sub" data-i18n="svc_sub">Cada servicio está diseñado para migrantes recién llegados. Sabemos que tu tiempo es valioso.</p>
+    <div class="services-grid">
+      <div class="service-card"><span class="service-icon">📚</span><h3 data-i18n="svc1_title">Capacitación Teórica</h3><p data-i18n="svc1_desc">Te preparamos para el examen en INGLÉS y en tu idioma. Simulacros y material incluidos.</p><span class="service-tag" data-i18n="svc_inc">Incluido</span></div>
+      <div class="service-card featured"><span class="service-icon">💎</span><h3 data-i18n="svc2_title">Paquete PREMIUM</h3><p data-i18n="svc2_desc">Licencia en 1-2 días. TLSAE, teórico, práctico y DMV. La solución más rápida.</p><span class="service-tag premium" data-i18n="svc_popular">⭐ Más Popular</span></div>
+      <div class="service-card"><span class="service-icon">📋</span><h3 data-i18n="svc3_title">Gestión de Documentos</h3><p data-i18n="svc3_desc">Orientación con requisitos migratorios, pruebas de dirección e ITIN.</p><span class="service-tag" data-i18n="svc_inc">Incluido</span></div>
+      <div class="service-card"><span class="service-icon">🏎️</span><h3 data-i18n="svc4_title">Examen Práctico</h3><p data-i18n="svc4_desc">Preparación con instructores expertos. Aprueba a la primera.</p><span class="service-tag" data-i18n="svc_inc">Incluido</span></div>
+      <div class="service-card"><span class="service-icon">🏍️</span><h3 data-i18n="svc5_title">Licencia de Moto</h3><p data-i18n="svc5_desc">Endoso si tienes Clase E, o licencia completa.</p><span class="service-tag" data-i18n="svc_ask">Consultar</span></div>
+      <div class="service-card"><span class="service-icon">🎫</span><h3 data-i18n="svc6_title">Cursos por Tickets</h3><p data-i18n="svc6_desc">Limpia puntos y protege el costo de tu seguro.</p><span class="service-tag" data-i18n="svc_inc">Incluido</span></div>
     </div>
+  </div>
+</section>
 
-    <form id="mainForm">
-      <div class="form-group">
-        <label class="form-label" data-i18n="lbl_name">Nombre Completo</label>
-        <input type="text" name="nombre" class="form-input" placeholder="Ej. Juan Pérez" required>
+<!-- PROCESS -->
+<section class="process fade-in">
+  <div class="container">
+    <div class="section-tag" data-i18n="proc_tag">PROCESO</div>
+    <h2 class="section-title" data-i18n="proc_title">Así de simple es comenzar</h2>
+    <p class="section-sub" data-i18n="proc_sub">4 pasos y estás manejando legal.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3 data-i18n="step1_title">Contáctanos</h3><p data-i18n="step1_desc">Escríbenos por WhatsApp. Respondemos en minutos.</p></div>
+      <div class="step"><div class="step-num">2</div><h3 data-i18n="step2_title">Cita Personal</h3><p data-i18n="step2_desc">Analizamos tu caso y elegimos el plan ideal.</p></div>
+      <div class="step"><div class="step-num">3</div><h3 data-i18n="step3_title">Preparación</h3><p data-i18n="step3_desc">Curso TLSAE, teoría, práctica. Nosotros gestionamos.</p></div>
+      <div class="step"><div class="step-num">4</div><h3 data-i18n="step4_title">¡Licencia!</h3><p data-i18n="step4_desc">Te acompañamos al DMV y sales con tu licencia.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVISOR -->
+<section class="advisor fade-in" id="asesor">
+  <div class="container">
+    <div class="advisor-inner">
+      <div>
+        <div class="section-tag" data-i18n="adv_tag">NUESTROS INSTRUCTORES</div>
+        <h2 data-i18n="adv_title">Instructores<br>Especializados en<br>Migrantes</h2>
+        <p style="color:var(--muted); margin-top:12px; line-height:1.6; font-size:0.9rem" data-i18n="adv_desc">Más de 20 años de experiencia en administración y gestión. Especializados en orientar a migrantes recién llegados a Florida para obtener su licencia de conducir de forma rápida, legal y sin estrés.</p>
+        <ul class="advisor-perks">
+          <li><span>✓</span> <span data-i18n="perk1">Asesoría personalizada según tu status migratorio</span></li>
+          <li><span>✓</span> <span data-i18n="perk2">Acompañamiento total en el DMV el día del examen</span></li>
+          <li><span>✓</span> <span data-i18n="perk3">Atención en español, inglés y otros idiomas</span></li>
+          <li><span>✓</span> <span data-i18n="perk4">Revisión completa de documentos antes de cualquier trámite</span></li>
+        </ul>
+        <div class="zero-fail"><span class="icon">🏆</span><div><strong data-i18n="zf_title">⚠️ CERO REPROBADOS</strong><p data-i18n="zf_desc">Nuestros clientes aprueban. Si estudias con nosotros, pasas. Garantizado.</p></div></div>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="form-group">
-        <label class="form-label" data-i18n="lbl_service">Servicio Requerido</label>
-        <select name="servicio" class="form-input" required>
-          <option value="" disabled selected data-i18n="opt_default">Selecciona una opción</option>
-          <option value="Licencia por Primera Vez">Licencia por Primera Vez</option>
-          <option value="Renovación de Licencia">Renovación de Licencia</option>
-          <option value="Permiso de Conducir">Permiso de Conducir</option>
-          <option value="Homologación / Internacional">Homologación Internacional</option>
-        </select>
+<!-- TESTIMONIALS -->
+<section class="testimonials fade-in" id="testimonios">
+  <div class="container">
+    <div class="section-tag" data-i18n="test_tag">TESTIMONIOS REALES</div>
+    <h2 class="section-title" data-i18n="test_title">Personas que ya<br>están manejando legal</h2>
+    <p class="section-sub" data-i18n="test_sub">Cada historia es diferente. Todos llegaron sin saber por dónde empezar.</p>
+    <div class="testimonials-grid">
+      <div class="tcard"><div class="stars">★★★★★</div><blockquote data-i18n="t1_quote">"Llegué de Venezuela sin inglés y sin saber nada del DMV. Luis me guió paso a paso. En 2 días tenía mi licencia Clase E. ¡Increíble!"</blockquote><div class="tcard-author"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" class="tcard-avatar" alt="Carlos"><div><div class="tcard-name">Carlos M.</div><div class="tcard-origin">🇻🇪 Venezuela → Miami, FL</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><blockquote data-i18n="t2_quote">"Tenía miedo de reprobar en inglés. Con la preparación de Luis lo aprobé al primer intento. El paquete premium vale cada centavo."</blockquote><div class="tcard-author"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" class="tcard-avatar" alt="Maria"><div><div class="tcard-name">María G.</div><div class="tcard-origin">🇨🇴 Colombia → Orlando, FL</div></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><blockquote data-i18n="t3_quote">"Vine de Haiti y me comunicaron todo en créole. El proceso fue claro y rápido. En menos de 48 horas tenía mi licencia."</blockquote><div class="tcard-author"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" class="tcard-avatar" alt="Jean"><div><div class="tcard-name">Jean P.</div><div class="tcard-origin">🇭🇹 Haiti → Doral, FL</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing fade-in" id="precios">
+  <div class="container">
+    <div class="section-tag" data-i18n="price_tag">NUESTROS PLANES</div>
+    <h2 class="section-title" data-i18n="price_title">Elige tu plan</h2>
+    <p class="section-sub" data-i18n="price_sub">Escríbenos por WhatsApp y te damos el precio personalizado según tu caso.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3 data-i18n="p1_name">Gestión Examen Teórico</h3>
+        <p style="color:var(--muted);font-size:0.8rem" data-i18n="p1_sub">Capacitación + examen teórico</p>
+        <div class="price-consult-badge">📲 Consulta precio por WhatsApp</div>
+        <ul class="price-features">
+          <li>Capacitación especializada teórica</li>
+          <li>Simuladores de examen</li>
+          <li>Curso de Alcohol y Drogas (TLSAE)</li>
+          <li>Examen con repeticiones incluidas</li>
+          <li>Guía ante el ente oficial</li>
+        </ul>
+        <a href="https://wa.me/14178532077?text=Hola%2C%20me%20interesa%20la%20Gestión%20de%20Examen%20Teórico%2C%20¿cuál%20es%20el%20precio%3F" class="price-cta outline-cta" target="_blank" data-i18n="p_consult">Consultar precio →</a>
       </div>
-
-      <div class="form-group">
-        <label class="form-label" data-i18n="lbl_status">Estatus Migratorio Actual</label>
-        <select name="estatus" class="form-input" required>
-          <option value="" disabled selected data-i18n="opt_status_default">Selecciona tu estatus</option>
-          <option value="Pasaporte Vigente">Pasaporte Vigente</option>
-          <option value="Asilo Pendiente / Proceso">Asilo Pendiente / Proceso</option>
-          <option value="Permiso de Trabajo / SSN">Permiso de Trabajo / SSN</option>
-          <option value="Visa de Turista">Visa de Turista</option>
-          <option value="Residente / Ciudadano">Residente / Ciudadano</option>
-        </select>
+      <div class="price-card popular">
+        <div class="popular-label" data-i18n="p_popular">⭐ MÁS POPULAR</div>
+        <h3 data-i18n="p2_name">Plan Premium Integral</h3>
+        <p style="color:var(--muted);font-size:0.8rem" data-i18n="p2_sub">Licencia completa en 1-2 días</p>
+        <div class="price-consult-badge popular-badge">📲 Consulta precio por WhatsApp</div>
+        <ul class="price-features">
+          <li>Curso TLSAE (Alcohol y Drogas)</li>
+          <li>Capacitación teórica en tu idioma</li>
+          <li>Simulador + examen ilimitado hasta aprobar</li>
+          <li>Examen práctico incluido</li>
+          <li>Acompañamiento total en el DMV</li>
+          <li>Gestión del documento mismo día</li>
+          <li>Garantía: 0% reprobados</li>
+        </ul>
+        <a href="https://wa.me/14178532077?text=Hola%2C%20me%20interesa%20el%20Plan%20Premium%2C%20¿cuál%20es%20el%20precio%3F" class="price-cta primary-cta" target="_blank" data-i18n="p_start">¡Consultar precio ahora! →</a>
       </div>
-
-      <div class="form-group">
-        <label class="form-label" data-i18n="lbl_whatsapp">WhatsApp de Contacto</label>
-        <input type="tel" name="whatsapp" class="form-input" placeholder="+1 (000) 000-0000" required>
+      <div class="price-card">
+        <h3 data-i18n="p3_name">Licencia Motocicleta</h3>
+        <p style="color:var(--muted);font-size:0.8rem" data-i18n="p3_sub">Requiere Clase E previa</p>
+        <div class="price-consult-badge">📲 Consulta precio por WhatsApp</div>
+        <ul class="price-features">
+          <li>Examen teórico online</li>
+          <li>Formación práctica en moto</li>
+          <li>Uso de motocicleta para la prueba</li>
+          <li>Gestión de licencia mismo día</li>
+        </ul>
+        <a href="https://wa.me/14178532077?text=Hola%2C%20me%20interesa%20la%20Licencia%20de%20Motocicleta%2C%20¿cuál%20es%20el%20precio%3F" class="price-cta outline-cta" target="_blank" data-i18n="p_consult">Consultar precio →</a>
       </div>
+    </div>
+  </div>
+</section>
 
-      <button type="submit" id="submitBtn" class="form-btn" data-i18n="btn_send">ENVIAR SOLICITUD</button>
-    </form>
-
-    <div id="successMsg" class="success-msg">
-      <strong data-i18n="success_title">¡Solicitud Enviada!</strong><br>
-      <span data-i18n="success_text">Un asesor se comunicará contigo vía WhatsApp a la brevedad.</span>
+<!-- LANGUAGES -->
+<section class="languages fade-in">
+  <div class="container">
+    <div class="section-tag" data-i18n="lang_tag">ATENCIÓN MULTILINGÜE</div>
+    <h2 class="section-title" data-i18n="lang_title">Atendemos en tu idioma</h2>
+    <p class="section-sub" data-i18n="lang_sub">Nadie debería perderse por no hablar inglés. Estamos aquí en tu idioma.</p>
+    <div class="lang-flags">
+      <div class="lang-flag"><span class="fl">🇪🇸</span> Español</div>
+      <div class="lang-flag"><span class="fl">🇺🇸</span> English</div>
+      <div class="lang-flag"><span class="fl">🇧🇷</span> Português</div>
+      <div class="lang-flag"><span class="fl">🇫🇷</span> Français</div>
+      <div class="lang-flag"><span class="fl">🇭🇹</span> Créole</div>
+      <div class="lang-flag"><span class="fl">🌍</span> <span data-i18n="lang_more">+Más idiomas</span></div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="container">
-    <p>© 2026 Florida Driver License Services. <span data-i18n="footer_sub">Expertos en Trámites.</span></p>
+  <div class="footer-inner">
+    <div class="footer-logo">🚗 Florida License Fast</div>
+    <p class="footer-sub" data-i18n="footer_sub">WhatsApp: +1 (417) 853-2077 · Miami · Orlando · Tampa · Doral · Kissimmee</p>
+    <div class="footer-links">
+      <a href="#servicios" data-i18n="flink1">Servicios</a>
+      <a href="#asesor" data-i18n="flink2">El Instructor</a>
+      <a href="#testimonios" data-i18n="flink3">Testimonios</a>
+      <a href="#precios" data-i18n="flink4">Precios</a>
+      <a href="https://wa.me/14178532077" target="_blank">WhatsApp</a>
+      <a href="https://t.me/licenciaUSA_bot" target="_blank">Telegram</a>
+    </div>
+    <p class="footer-copy" data-i18n="footer_copy">© 2025 Florida License Fast · Luis · Servicio de asesoría independiente · No somos el DMV oficial</p>
   </div>
 </footer>
 
-<div class="chat-widget">
+<!-- FLOATING BUTTONS (pulsating) -->
+<div id="floating-btns">
+  <a href="https://wa.me/14178532077" class="fab fab-wa" id="fabWA" target="_blank">
+    <span class="fab-label">WhatsApp</span>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+  <a href="https://t.me/licenciaUSA_bot" class="fab fab-tg fab-sharon" id="fabTG" target="_blank">
+    <span class="fab-label">Sharon — Asistente Virtual</span>
+    <img src="https://i.imgur.com/tG3FhsP.png" alt="Sharon" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">
+  </a>
+  <button class="fab fab-chat" id="fabChat" onclick="toggleChat()">
+    <span class="fab-label">Sofía — Asistente IA</span>
+    <img src="https://i.imgur.com/FwSvlok.jpeg" alt="Sofía" id="chatBotIcon">
+  </button>
+</div>
+
+<!-- CHAT WINDOW -->
+<div id="chatWindow">
   <div class="chat-header">
-    <h4 data-i18n="chat_title">Asistente Virtual</h4>
-    <div class="chat-status"><span data-i18n="chat_status">● En línea</span></div>
+    <img src="https://i.imgur.com/FwSvlok.jpeg" class="chat-avatar" alt="Sofía" id="chatHeaderAvatar">
+    <div class="chat-header-info">
+      <div class="chat-header-name">Sofía 🤖</div>
+      <div class="chat-header-status" data-i18n="chat_status">● En línea · Responde al instante</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
   </div>
-  <div class="chat-body" id="chatBody">
-    <div class="msg msg-bot" data-i18n="chat_welcome">¡Hola! 👋 Soy Sofía. ¿Quieres obtener tu licencia de conducir en Florida rápido y sin hablar inglés?</div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">👋 ¡Hola! Soy <strong>Sofía</strong>, la asistente virtual de <strong>Florida License Fast</strong>. Puedo ayudarte en cualquier idioma sobre tu licencia en Florida — requisitos, documentos, proceso y más. ¿En qué te ayudo hoy?</div>
   </div>
   <div class="chat-footer">
-    <input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu pregunta...">
-    <button onclick="sendChat()" style="background:var(--accent); border:none; width:40px; height:40px; border-radius:10px; cursor:pointer;">➔</button>
+    <input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendMsg(); }">
+    <button class="chat-send" id="chatSendBtn" onclick="sendMsg()">➤</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--  MODAL FORMULARIO DE CONTACTO – Captación de Leads            -->
+<!--  Se abre con el enlace:  https://tusitio.com/#formulario      -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<style>
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 16px;
+  }
+  .modal-overlay.active {
+    opacity: 1; visibility: visible;
+  }
+  .modal-card {
+    background: var(--surface2, #111c30);
+    border: 1px solid var(--border, rgba(0,212,255,0.18));
+    border-radius: 24px;
+    padding: 24px 20px 20px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    color: var(--text, #e8edf5);
+    font-family: 'DM Sans', sans-serif;
+    animation: modalIn 0.35s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  @keyframes modalIn {
+    from { transform: translateY(30px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .modal-close {
+    position: absolute; top: 10px; right: 14px;
+    background: none; border: none;
+    color: var(--muted, #7a8ba8); font-size: 1.6rem;
+    cursor: pointer; line-height: 1;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: #fff; }
+  .modal-header { text-align: center; margin-bottom: 20px; }
+  .modal-header h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.3rem; margin-bottom: 6px;
+    color: var(--accent, #00d4ff);
+  }
+  .modal-header p {
+    font-size: 0.8rem; color: var(--muted, #7a8ba8);
+  }
+  .lead-form { display: flex; flex-direction: column; gap: 14px; }
+  .lead-group { display: flex; flex-direction: column; gap: 4px; }
+  .lead-label {
+    font-size: 0.72rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--muted, #7a8ba8);
+  }
+  .lead-input, .lead-select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border, rgba(0,212,255,0.15));
+    border-radius: 12px;
+    padding: 11px 14px;
+    color: #fff;
+    font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border 0.25s, box-shadow 0.25s;
+    -webkit-appearance: none;
+  }
+  .lead-input:focus, .lead-select:focus {
+    border-color: var(--accent, #00d4ff);
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+  }
+  .lead-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a8ba8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .lead-input::placeholder { color: #4a5568; }
+  .lead-btn {
+    background: linear-gradient(135deg, var(--accent, #00d4ff), #0099bb);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 6px;
+  }
+  .lead-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,212,255,0.35); }
+  .lead-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .success-box {
+    text-align: center;
+    padding: 20px 10px;
+    display: none;
+  }
+  .success-box .icon { font-size: 3rem; margin-bottom: 10px; }
+  .success-box h3 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.2rem; color: var(--green, #00e676);
+    margin-bottom: 6px;
+  }
+  .success-box p { font-size: 0.82rem; color: var(--muted, #7a8ba8); }
+  @media (max-width: 480px) {
+    .modal-card { padding: 18px 14px 16px; border-radius: 20px; }
+    .modal-header h2 { font-size: 1.1rem; }
+  }
+</style>
+
+<div class="modal-overlay" id="modalFormOverlay">
+  <div class="modal-card">
+    <button class="modal-close" onclick="cerrarModalForm()">&times;</button>
+    <div class="modal-header">
+      <h2>📋 Datos de Contacto</h2>
+      <p>Completa el formulario y un asesor te contactará por WhatsApp en breve.</p>
+    </div>
+    <form class="lead-form" id="leadForm" onsubmit="enviarLead(event)">
+      <div class="lead-group">
+        <label class="lead-label">Nombre Completo</label>
+        <input type="text" id="leadNombre" class="lead-input" placeholder="Ej: Juan Pérez" required>
+      </div>
+      <div class="lead-group">
+        <label class="lead-label">Servicio que solicita</label>
+        <select id="leadServicio" class="lead-select" required>
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="Tramitación de Licencia">Tramitación de Licencia</option>
+          <option value="Permiso de Trabajo">Permiso de Trabajo</option>
+          <option value="Renovación">Renovación</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
+      <div class="lead-group">
+        <label class="lead-label">¿Cuál es tu estatus migratorio actual?</label>
+        <select id="leadEstatus" class="lead-select" required>
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="Pasaporte">Pasaporte</option>
+          <option value="Permiso de Trabajo">Permiso de Trabajo</option>
+          <option value="Residencia">Residencia</option>
+          <option value="En Proceso">En Proceso</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
+      <div class="lead-group">
+        <label class="lead-label">Número de WhatsApp</label>
+        <input type="tel" id="leadWhatsapp" class="lead-input" placeholder="+1 417 853 2077" required pattern="[+]?[0-9\s\-]{7,18}" title="Ingresa un número de WhatsApp válido (7 a 18 dígitos)">
+      </div>
+      <button type="submit" class="lead-btn" id="leadSubmitBtn">ENVIAR DATOS</button>
+    </form>
+    <div class="success-box" id="leadSuccess">
+      <div class="icon">✅</div>
+      <h3>¡Datos recibidos!</h3>
+      <p>Un asesor te contactará por WhatsApp en breve.</p>
+    </div>
   </div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsWH-MZqVJREoPQEkTuZXE10S3bhRwItmvJBvyhZea0SQtf2cCfobnIH7jekZamVVb/exec";
-
-// ── 1. RASTREADOR INVISIBLE DE VISITANTES ──
-(function() {
-    const VISITOR_KEY = 'v_internal_id';
-    let vId = localStorage.getItem(VISITOR_KEY);
-    let isNew = !vId;
-    if (isNew) {
-        vId = 'USR-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-        localStorage.setItem(VISITOR_KEY, vId);
+  // ── Chat open/close ──
+  let chatOpen = false;
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    const win = document.getElementById('chatWindow');
+    const fabWA = document.getElementById('fabWA');
+    const fabTG = document.getElementById('fabTG');
+    if (chatOpen) {
+      win.classList.add('open');
+      fabWA.style.transform = 'scale(0)'; fabWA.style.opacity = '0'; fabWA.style.pointerEvents = 'none';
+      fabTG.style.transform = 'scale(0)'; fabTG.style.opacity = '0'; fabTG.style.pointerEvents = 'none';
+      setTimeout(() => document.getElementById('chatInput').focus(), 350);
+    } else {
+      win.classList.remove('open');
+      fabWA.style.transform = ''; fabWA.style.opacity = ''; fabWA.style.pointerEvents = '';
+      fabTG.style.transform = ''; fabTG.style.opacity = ''; fabTG.style.pointerEvents = '';
     }
-    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ 'action': 'counter', 'visitorId': vId, 'isNew': isNew })});
-})();
+  }
 
-// ── 2. ENVÍO DE FORMULARIO ──
-document.getElementById('mainForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerText = "PROCESANDO...";
+  // ── SOFIA CHATBOT — Google Apps Script ──
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwatFXY-3WQTVHOygkmNH4DhOGJV1xjc56UGHBi5gLkI5yxCnbl_GiDjE7qpokb1k_oEg/exec';
+  let busy = false;
 
-    const formData = new FormData(e.target);
-    formData.append('action', 'submit_form');
+  function addMsg(html, cls) {
+    const d = document.createElement('div');
+    d.className = 'msg ' + cls;
+    d.innerHTML = html;
+    const c = document.getElementById('chatMessages');
+    c.appendChild(d);
+    c.scrollTop = c.scrollHeight;
+  }
+
+  function showDots() {
+    const d = document.createElement('div');
+    d.className = 'msg loading'; d.id = 'dots';
+    d.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+    const c = document.getElementById('chatMessages');
+    c.appendChild(d); c.scrollTop = c.scrollHeight;
+  }
+  function hideDots() { const el = document.getElementById('dots'); if(el) el.remove(); }
+
+  async function sendMsg() {
+    if (busy) return;
+    const inp = document.getElementById('chatInput');
+    const txt = inp.value.trim();
+    if (!txt) return;
+
+    inp.value = '';
+    busy = true;
+    document.getElementById('chatSendBtn').disabled = true;
+
+    addMsg(txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'), 'user');
+    showDots();
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 20000);
 
     try {
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(formData)});
-        e.target.style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-    } catch (err) {
-        alert("Error al enviar. Intenta de nuevo.");
-        btn.disabled = false;
-        btn.innerText = "ENVIAR SOLICITUD";
+      const res  = await fetch(GAS_URL + '?message=' + encodeURIComponent(txt), { signal: controller.signal });
+      clearTimeout(timer);
+      const data = await res.json();
+      const reply = (data.answer || data.reply || '').replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+      hideDots();
+      addMsg(reply || '⚠️ Sin respuesta del servidor.', 'bot');
+    } catch(err) {
+      clearTimeout(timer);
+      hideDots();
+      const msg = err.name === 'AbortError'
+        ? '⏱️ La respuesta tardó demasiado. Intenta de nuevo o contáctanos:<br><br>📲 <a href="https://wa.me/14178532077" target="_blank" style="color:var(--wa);font-weight:700">WhatsApp +1 (417) 853-2077</a>'
+        : '⚠️ Sin conexión ahora mismo. Contáctanos:<br><br>📲 <a href="https://wa.me/14178532077" target="_blank" style="color:var(--wa);font-weight:700">WhatsApp +1 (417) 853-2077</a><br>✈️ <a href="https://t.me/licenciaUSA_bot" target="_blank" style="color:var(--tg);font-weight:700">Telegram @licenciaUSA_bot</a>';
+      addMsg(msg, 'bot');
+    } finally {
+      busy = false;
+      document.getElementById('chatSendBtn').disabled = false;
+      inp.focus();
     }
-});
-
-// ── 3. LÓGICA DE IDIOMAS (Sincronizada con tu original) ──
-const i18n = {
-  es: {
-    hero_title_raw: 'TU LICENCIA <span>RÁPIDA Y FÁCIL</span>',
-    hero_sub: 'Obtén tu licencia de conducir en Florida sin complicaciones. Asesoría experta en tu propio idioma.',
-    card1_title: 'Sin Miedo al Inglés', card1_text: 'Te preparamos y acompañamos en todo el proceso para que el idioma no sea una barrera.',
-    card2_title: 'Todo Tipo de Estatus', card2_text: 'Asesoría para personas con pasaporte, permiso de trabajo, asilo o residencia.',
-    card3_title: 'Instructores Certificados', card3_text: 'Expertos con años de experiencia ayudando a la comunidad latina en Florida.',
-    reg_span: 'Oficial', reg_sub: 'Ingresa tus datos para procesar tu solicitud y asignarte un asesor especializado.',
-    lbl_name: 'Nombre Completo', lbl_service: 'Servicio Requerido', lbl_status: 'Estatus Migratorio Actual', lbl_whatsapp: 'WhatsApp de Contacto',
-    btn_send: 'ENVIAR SOLICITUD', success_title: '¡Solicitud Enviada!', success_text: 'Un asesor se comunicará contigo vía WhatsApp a la brevedad.',
-    opt_default: 'Selecciona una opción', opt_status_default: 'Selecciona tu estatus',
-    chat_title: 'Asistente Virtual', chat_status: '● En línea', chat_welcome: '¡Hola! 👋 Soy Sofía. ¿Quieres obtener tu licencia de conducir en Florida rápido y sin hablar inglés?',
-    footer_sub: 'Expertos en Trámites.'
-  },
-  en: {
-    hero_title_raw: 'YOUR LICENSE <span>FAST AND EASY</span>',
-    hero_sub: 'Get your Florida driver\'s license without complications. Expert advice in your own language.',
-    card1_title: 'No Fear of English', card1_text: 'We prepare and accompany you throughout the process so that language is not a barrier.',
-    reg_span: 'Official', reg_sub: 'Enter your details to process your request and assign a specialized advisor.',
-    lbl_name: 'Full Name', btn_send: 'SEND REQUEST', success_title: 'Request Sent!',
-    chat_title: 'Virtual Assistant', chat_welcome: 'Hi! 👋 I\'m Sofia. Do you want to get your Florida license fast without speaking English?'
   }
-  // Se pueden completar pt, fr, ht con la misma lógica
-};
 
-let currentLang = 'es';
-function setLang(lang) {
-  currentLang = lang;
-  const t = i18n[lang] || i18n.es;
-  const base = i18n.es;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const val = t[key] || base[key];
-    if (val) el.innerHTML = val;
-  });
-  const h1 = document.querySelector('.hero h1');
-  if (h1) h1.innerHTML = (t.hero_title_raw || base.hero_title_raw);
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  const active = document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
-  if (active) active.classList.add('active');
-}
+  // ── i18n ──
+  const i18n = {
+    es: {
+      hero_title_raw: "Obtén tu Licencia<br><em>de Florida</em><br>en 1-2 días",
+      hero_sub: "Miles de personas llegan a Florida cada día. No dejes que el idioma ni el proceso te detenga.",
+      nav_cta: "📲 Reservar Cita", stat1: "Reprobados", stat2: "Licencia Express", stat3: "Idiomas disponibles", stat4: "Personalizado",
+      svc_tag: "LO QUE OFRECEMOS", svc_title: "Todo lo que necesitas<br>para conducir legal", svc_sub: "Cada servicio está diseñado para migrantes recién llegados.",
+      svc1_title: "Capacitación Teórica", svc1_desc: "Te preparamos para el examen en INGLÉS y en tu idioma.",
+      svc2_title: "Paquete PREMIUM", svc2_desc: "Licencia en 1-2 días. TLSAE, teórico, práctico y DMV.",
+      svc3_title: "Gestión de Documentos", svc3_desc: "Orientación con requisitos migratorios.",
+      svc4_title: "Examen Práctico", svc4_desc: "Preparación con instructores expertos.",
+      svc5_title: "Licencia de Moto", svc5_desc: "Endoso si tienes Clase E, o licencia completa.",
+      svc6_title: "Cursos por Tickets", svc6_desc: "Limpia puntos y protege el costo de tu seguro.",
+      svc_inc: "Incluido", svc_popular: "⭐ Más Popular", svc_ask: "Consultar",
+      proc_tag: "PROCESO", proc_title: "Así de simple es comenzar", proc_sub: "4 pasos y estás manejando legal.",
+      step1_title: "Contáctanos", step1_desc: "Escríbenos por WhatsApp.",
+      step2_title: "Cita Personal", step2_desc: "Analizamos tu caso.",
+      step3_title: "Preparación", step3_desc: "Curso TLSAE, teoría, práctica.",
+      step4_title: "¡Licencia!", step4_desc: "Te acompañamos al DMV.",
+      adv_tag: "NUESTROS INSTRUCTORES", adv_title: "Instructores<br>Especializados en<br>Migrantes", adv_badge: "✓ Instructores Certificados",
+      adv_desc: "Más de 20 años de experiencia.",
+      perk1: "Asesoría según tu status migratorio", perk2: "Acompañamiento total en el DMV",
+      perk3: "Atención en español, inglés y otros idiomas", perk4: "Revisión completa de documentos",
+      zf_title: "⚠️ CERO REPROBADOS", zf_desc: "Nuestros clientes aprueban. Garantizado.",
+      test_tag: "TESTIMONIOS REALES", test_title: "Personas que ya<br>están manejando legal", test_sub: "Cada historia es diferente.",
+      t1_quote: '"Llegué de Venezuela sin inglés y sin saber nada del DMV. Luis me guió paso a paso. En 2 días tenía mi licencia Clase E. ¡Increíble!"',
+      t2_quote: '"Tenía miedo de reprobar en inglés. Con la preparación de Luis lo aprobé al primer intento."',
+      t3_quote: '"Vine de Haiti y me comunicaron todo en créole. El proceso fue claro y rápido."',
+      price_tag: "NUESTROS PLANES", price_title: "Elige tu plan", price_sub: "Escríbenos por WhatsApp y te damos el precio personalizado según tu caso.",
+      p1_name: "Gestión Examen Teórico", p1_sub: "Capacitación + examen teórico", p1_note: "",
+      p2_name: "Plan Premium Integral", p2_sub: "Licencia completa en 1-2 días", p2_note: "",
+      p3_name: "Licencia Motocicleta", p3_sub: "Requiere Clase E previa", p3_note: "",
+      p_consult: "Consultar precio →", p_start: "¡Consultar precio ahora! →", p_popular: "⭐ MÁS POPULAR",
+      lang_tag: "ATENCIÓN MULTILINGÜE", lang_title: "Atendemos en tu idioma", lang_sub: "Nadie debería perderse por no hablar inglés.", lang_more: "+Más idiomas",
+      footer_sub: "WhatsApp: +1 (417) 853-2077",
+      flink1: "Servicios", flink2: "El Instructor", flink3: "Testimonios", flink4: "Precios",
+      footer_copy: "© 2025 Florida License Fast · Luis · Servicio de asesoría independiente · No somos el DMV oficial",
+      chat_status: "● En línea · Responde al instante"
+    },
+    en: {
+      hero_title_raw: "Get your Florida<br><em>Driver License</em><br>in 1-2 days",
+      hero_sub: "Thousands of people arrive in Florida daily. Don't let the language or the process stop you.",
+      nav_cta: "📲 Book Appointment", stat1: "Zero Failures", stat2: "Express License", stat3: "Languages", stat4: "Personalized",
+      adv_tag: "OUR INSTRUCTORS", adv_title: "Certified<br>Instructors<br>& Guides", adv_badge: "✓ Certified Instructors",
+      chat_status: "● Online · Replies instantly", footer_sub: "WhatsApp: +1 (417) 853-2077"
+    },
+    pt: {
+      hero_title_raw: "Obtenha sua Carteira<br><em>da Flórida</em><br>em 1-2 dias",
+      hero_sub: "Milhares de pessoas chegam à Flórida todos os dias.",
+      nav_cta: "📲 Agendar Consulta",
+      adv_tag: "NOSSOS INSTRUTORES", adv_title: "Instrutores<br>Especializados em<br>Migrantes", adv_badge: "✓ Instrutores Certificados",
+      chat_status: "● Online · Responde na hora", footer_sub: "Instrutor: Luis · WhatsApp: +1 (417) 853-2077"
+    },
+    fr: {
+      hero_title_raw: "Obtenez votre Permis<br><em>de Floride</em><br>en 1-2 jours",
+      hero_sub: "Des milliers de personnes arrivent en Floride chaque jour.",
+      nav_cta: "📲 Prendre RDV",
+      adv_tag: "NOS INSTRUCTEURS", adv_title: "Instructeurs<br>Spécialisés pour<br>Migrants", adv_badge: "✓ Instructeurs Certifiés",
+      chat_status: "● En ligne · Répond instantanément", footer_sub: "Instructeur: Luis · WhatsApp: +1 (417) 853-2077"
+    },
+    ht: {
+      hero_title_raw: "Jwenn Lisans<br><em>Florida</em><br>ou nan 1-2 jou",
+      hero_sub: "Plizyè milye moun rive Florida chak jou.",
+      nav_cta: "📲 Pran Randevou",
+      adv_tag: "NOU ENSTRIKTÈ", adv_title: "Enstriktè<br>Espesyalize pou<br>Migran", adv_badge: "✓ Enstriktè Sètifye yo",
+      chat_status: "● Anliy · Reponn touswit", footer_sub: "Enstriktè: Luis · WhatsApp: +1 (417) 853-2077"
+    }
+  };
 
-// ── 4. CHATBOT FUNCTION ──
-async function sendChat() {
-  const input = document.getElementById('chatInput');
-  const body = document.getElementById('chatBody');
-  if(!input.value.trim()) return;
-
-  const userMsg = input.value;
-  body.innerHTML += `<div class="msg msg-user">${userMsg}</div>`;
-  input.value = '';
-  body.scrollTop = body.scrollHeight;
-
-  try {
-    const res = await fetch(`https://script.google.com/macros/s/AKfycbzsWH-MZqVJREoPQEkTuZXE10S3bhRwItmvJBvyhZea0SQtf2cCfobnIH7jekZamVVb/exec?message=${encodeURIComponent(userMsg)}`);
-    const data = await res.json();
-    body.innerHTML += `<div class="msg msg-bot">${data.answer}</div>`;
-  } catch (e) {
-    body.innerHTML += `<div class="msg msg-bot">Lo siento, intenta de nuevo en un momento.</div>`;
+  let currentLang = 'es';
+  function setLang(lang) {
+    currentLang = lang;
+    const t = i18n[lang] || i18n.es;
+    const base = i18n.es;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = t[key] || base[key];
+      if (val) el.innerHTML = val;
+    });
+    const h1 = document.querySelector('.hero h1');
+    if (h1) h1.innerHTML = (t.hero_title_raw || base.hero_title_raw);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const active = document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]');
+    if (active) active.classList.add('active');
+    const inp = document.getElementById('chatInput');
+    if (inp) {
+      const ph = { es:'Escribe tu pregunta...', en:'Type your question...', pt:'Digite sua pergunta...', fr:'Écrivez votre question...', ht:'Ekri kesyon ou...' };
+      inp.placeholder = ph[lang] || ph.es;
+    }
+    document.documentElement.lang = lang;
   }
-  body.scrollTop = body.scrollHeight;
-}
+
+  // ── Scroll fade-in ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  window.addEventListener('DOMContentLoaded', () => setLang('es'));
+
+  // ── MODAL FORM LOGIC ──
+  (function() {
+    const overlay = document.getElementById('modalFormOverlay');
+
+    function abrirModalForm() {
+      overlay.classList.add('active');
+      document.getElementById('leadForm').style.display = '';
+      document.getElementById('leadSuccess').style.display = 'none';
+      document.getElementById('leadForm').reset();
+      document.getElementById('leadSubmitBtn').disabled = false;
+    }
+
+    function cerrarModalForm() {
+      overlay.classList.remove('active');
+      if (window.location.hash === '#formulario') {
+        history.replaceState(null, null, ' ');
+      }
+    }
+
+    window.cerrarModalForm = cerrarModalForm;
+
+    if (window.location.hash === '#formulario') {
+      setTimeout(abrirModalForm, 400);
+    }
+
+    window.addEventListener('hashchange', function() {
+      if (window.location.hash === '#formulario') {
+        abrirModalForm();
+      }
+    });
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) cerrarModalForm();
+    });
+
+    window.enviarLead = function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('leadSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      const payload = {
+        nombre:    document.getElementById('leadNombre').value.trim(),
+        servicio:  document.getElementById('leadServicio').value,
+        estatus:   document.getElementById('leadEstatus').value,
+        whatsapp:  document.getElementById('leadWhatsapp').value.trim()
+      };
+
+      fetch('https://script.google.com/macros/s/AKfycbzsWH-MZqVJREoPQEkTuZXE10S3bhRwItmvJBvyhZea0SQtf2cCfobnIH7jekZamVVb/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(payload).toString()
+      })
+      .then(() => {
+        document.getElementById('leadForm').style.display = 'none';
+        document.getElementById('leadSuccess').style.display = 'block';
+      })
+      .catch(() => {
+        document.getElementById('leadForm').style.display = 'none';
+        document.getElementById('leadSuccess').style.display = 'block';
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'ENVIAR DATOS';
+      });
+    };
+  })();
 </script>
 </body>
 </html>
